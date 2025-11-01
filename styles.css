@@ -1,0 +1,97 @@
+main > h1 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+#messages-warn {
+    opacity: 30%;
+    text-align: center;
+}
+
+body {
+    font-family: "Poppins", Arial, Helvetica, sans-serif;
+    display: flex;
+    height: 100%;
+    gap: 20px;
+}
+
+html {
+    height: 100vh;
+    overflow: hidden;
+}
+
+main {
+    background-color: rgb(238, 238, 238);
+    outline: 1px solid rgb(218, 218, 218);
+    width: 600px;
+    max-height: 550px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+#message-field {
+    margin: 10px 0;
+}
+
+.flex-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.divider {
+    background-color: rgb(199, 199, 199);
+    height: 1px;
+    width: 100%;
+}
+
+#server-address-display { 
+    font-weight: 800;
+}
+
+#messages-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 450px;
+    overflow-y: auto; 
+}
+
+.message-log {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    outline: 1px solid rgb(219, 219, 219);
+    border-radius: 10px;
+    max-width: 50%;
+    padding: 10px;
+    margin: 20px 0;
+    gap: 8px;
+}
+
+.message-log-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.message-log-info > h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.message-log-info > p {
+    margin: 0;
+    opacity: 60%;
+    font-size: 12px;
+}
+
+.message-log > p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.connection-container > p {
+    margin: 5px 0;
+    font-size: small;
+}

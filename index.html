@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Socket.io Tester</title>
+</head>
+<body>
+    <main>
+        <h1>Messages</h1> 
+        <div class="divider"></div>
+        <ul id="messages-list">
+            <li><p id="messages-warn">Messages not found.</p></li>
+        </ul>
+        <div class="divider"></div>
+        <div id="message-field" class="flex-horizontal">
+            <input type="text" placeholder="type (json, string)" id="message-type">
+            <input type="text" style="width: 100%;" id="message-value" placeholder="message...">
+            <button id="send-message-button">Send</button>
+        </div>
+    </main>
+    <div class="connection-container">
+        <div class="flex-horizontal">
+            <input 
+                id="connection-ip" type="text" value="http://localhost:"
+                placeholder="Insert the WebSocket server address"
+            >
+            <button id="connection-button">Connect</button>
+            <button 
+                id="disconnection-button" 
+                style="display: none;"
+                onclick="disconnectSocket()"
+            >
+                Disconnect
+            </button>
+        </div>
+        <p>
+            Connected to: 
+            <span id="server-address-display">
+                undefined
+            </span>
+        </p>
+    </div>
+</body>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="utils.js"></script>
+<script src="main.js"></script>
+</html>
