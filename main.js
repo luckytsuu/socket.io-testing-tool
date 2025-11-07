@@ -31,7 +31,7 @@ sendMessageButton.addEventListener("click", () => {
 
     if (isValidString(messageType)) {
         messageType = messageType.toLowerCase().trim()
-        messageEvent = messageEvent.toLowerCase().trim()
+        messageEvent = messageEvent.trim()
         let message = messageValueInput.value
 
         if (!isValidString(message)) {
