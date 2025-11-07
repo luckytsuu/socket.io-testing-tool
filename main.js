@@ -6,6 +6,7 @@ const connectionButton = document.querySelector("#connection-button")
 const disconnectionButton = document.querySelector("#disconnection-button")
 const messageTypeInput = document.querySelector("#message-type")
 const messageValueInput = document.querySelector("#message-value")
+const messageEventInput = document.querySelector("#message-event")
 const sendMessageButton = document.querySelector("#send-message-button")
 
 let socket = undefined
@@ -22,17 +23,23 @@ connectionButton.addEventListener("click", () => {
 
 sendMessageButton.addEventListener("click", () => {
     let messageType = messageTypeInput.value
+    let messageEvent = messageEventInput.value
 
     if (!isConnected(socket)) {
         createMessage("message error", "Socket need to be connected before trying to send message.")
     }
 
     if (isValidString(messageType)) {
-        messageType = messageType.toLowerCase()
+        messageType = messageType.toLowerCase().trim()
+        messageEvent = messageEvent.toLowerCase().trim()
         let message = messageValueInput.value
 
         if (!isValidString(message)) {
             createMessage("message value error", "Null message value.")
+        }
+
+        if (!isValidString(messageEvent)) {
+            messageEvent = "message"
         }
 
         switch (messageType) {
@@ -48,8 +55,8 @@ sendMessageButton.addEventListener("click", () => {
                 return
         }
 
-        socket.emit("message", message)
-        createMessage("sended message", message)
+        socket.emit(messageEvent, message)
+        createMessage("sended message", `(channel="${messageEvent}"): ${message}`)
     } else {
         createMessage("message type error", "Null message type.")
     }
