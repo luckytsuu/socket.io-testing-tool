@@ -61,6 +61,7 @@ sendMessageButton.addEventListener("click", () => {
         messageType = messageType.toLowerCase().trim()
         messageEvent = messageEvent.trim()
         let message = messageValueInput.value
+        let messageDisplay = undefined
 
         if (!isValidString(message)) {
             createMessage("message value error", "Null message value.")
@@ -72,6 +73,7 @@ sendMessageButton.addEventListener("click", () => {
 
         switch (messageType) {
             case "json":
+                messageDisplay = message
                 message = JSON.parse(message)
             case "string":
                 break
@@ -85,7 +87,10 @@ sendMessageButton.addEventListener("click", () => {
 
         messageValueInput.value = ""
         socket.emit(messageEvent, message)
-        createMessage(`sended message ${messageEvent}`, message)
+        createMessage(
+            `sended message ${messageEvent}`, 
+            messageDisplay ?? message
+        )
     } else {
         createMessage("message type error", "Null message type.")
     }
