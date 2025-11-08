@@ -8,8 +8,29 @@ const messageTypeInput = document.querySelector("#message-type")
 const messageValueInput = document.querySelector("#message-value")
 const messageEventInput = document.querySelector("#message-event")
 const sendMessageButton = document.querySelector("#send-message-button")
+const clearHistoryButton = document.querySelector("#clear-history-button")
+const newChannelInput = document.querySelector("#new-channel-input")
+const newChannelButton = document.querySelector("#new-channel-button")
+const avaliableChannelsList = document.querySelector("#avaliable-channels")
 
 let socket = undefined
+
+const messageChannels = ["message"]
+
+newChannelButton.addEventListener("click", () => {
+    const newChannel = newChannelInput.value
+
+    if (isValidString(newChannel)) {
+        newChannelInput.value = ""
+        messageChannels.push(newChannel.trim())
+        updateListeningChannelsDisplay()
+    } else {
+        createMessage(
+            "channel creation error", 
+            `Invalid channel name: "${newChannel}"`
+        )
+    }
+})
 
 connectionButton.addEventListener("click", () => {
     const address = connectionPortInput.value
@@ -19,6 +40,13 @@ connectionButton.addEventListener("click", () => {
     } else {
         registerError("Forneça uma porta válida")
     }
+})
+
+clearHistoryButton.addEventListener("click", () => {
+    messagesList.querySelectorAll("li").forEach(item => item.remove())
+    const newListItem = document.createElement("li")
+    newListItem.appendChild(messagesWarn)
+    messagesList.appendChild(newListItem)
 })
 
 sendMessageButton.addEventListener("click", () => {
@@ -55,8 +83,9 @@ sendMessageButton.addEventListener("click", () => {
                 return
         }
 
+        messageValueInput.value = ""
         socket.emit(messageEvent, message)
-        createMessage("sended message", `(channel="${messageEvent}"): ${message}`)
+        createMessage(`sended message ${messageEvent}`, message)
     } else {
         createMessage("message type error", "Null message type.")
     }
@@ -86,21 +115,27 @@ function loadEvents(address) {
         disconnectionButton.style.display = "none"
     })
 
-    socket.on('message', data => {
-        createMessage("message", data)
-    })
-
     socket.on('connect_error', err => {
         createMessage("connection error", `${err}`)
         disconnectSocket()
     })
+
+    updateListeningChannelsDisplay()
 }
 
 function createMessage(type, msg) {
     if (messagesWarn) messagesWarn.remove()
-
+    
     const parent = document.createElement("li")
     parent.classList.add(["message-log"])
+
+    const isSendedMessage = type.startsWith("sended message")
+    let typeText = type
+
+    if (isSendedMessage) {
+        parent.style.marginLeft = "auto"
+        typeText = `\"${type.split(" ")[2]}\" message`
+    }
 
     const infoDisplay = document.createElement("div")
     infoDisplay.classList.add(["message-log-info"])
@@ -109,7 +144,7 @@ function createMessage(type, msg) {
     creationDateDisplay.textContent = new Date().toDateString()
 
     const typeDisplay = document.createElement("h1")
-    typeDisplay.textContent = type
+    typeDisplay.textContent = typeText
 
     const divider = document.createElement("div")
     divider.classList.add(["divider"])
@@ -119,12 +154,6 @@ function createMessage(type, msg) {
 
     appendChilds(infoDisplay, [typeDisplay, creationDateDisplay])
     appendChilds(parent, [infoDisplay, divider, msgDisplay])
-
-    switch (type) {
-        case "sended message":
-            parent.style.marginLeft = "auto"
-            break
-    }
 
     messagesList.appendChild(parent)
 }
@@ -137,3 +166,41 @@ function disconnectSocket() {
     connectedAddress.textContent = "undefined";
     socket.disconnect();
 }
+
+function updateListeningChannelsDisplay() {
+    avaliableChannelsList.querySelectorAll("li").forEach(child => child.remove())
+
+    messageChannels.forEach(channel => {
+        const removeButton = document.createElement("button")
+        removeButton.textContent = channel
+
+        removeButton.addEventListener("click", () => {
+            if (messageChannels.length === 1) {
+                createMessage(
+                    "channel exclusion error",
+                    "Client needs to be listening to at least one channel."
+                )
+                return
+            }
+
+            if (isConnected(socket)) socket.off(channel)
+            const i = messageChannels.indexOf(channel)
+            if (i !== -1) messageChannels.splice(i, 1)
+
+            updateListeningChannelsDisplay()
+        })
+
+        const listItem = document.createElement("li")
+        listItem.appendChild(removeButton)
+        avaliableChannelsList.appendChild(listItem)
+
+        if (isConnected(socket)) {
+            socket.off(channel)
+            socket.on(channel, data => {
+                createMessage(`"${channel}" message`, data)
+            })
+        }
+    })
+}
+
+updateListeningChannelsDisplay()

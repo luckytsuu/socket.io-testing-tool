@@ -10,6 +10,15 @@
 <body>
     <main>
         <h1>Messages</h1> 
+        <div id="messages-option-field" style="margin: 5px 0;" class="flex-horizontal">
+            <button id="clear-history-button">Clear</button>
+            <input type="text" id="new-channel-input" placeholder="New Channel">
+            <button id="new-channel-button">+</button>
+        </div>
+        <div id="avaliable-channels-field" style="margin-bottom: 5px;" class="flex-horizontal">
+            <p style="margin: 0; font-size: small;">listening channels:</p>
+            <ul class="flex-horizontal" id="avaliable-channels"/>
+        </div>
         <div class="divider"></div>
         <ul id="messages-list">
             <li><p id="messages-warn">Messages not found.</p></li>
@@ -17,7 +26,7 @@
         <div class="divider"></div>
         <div id="message-field" class="flex-horizontal">
             <input type="text" style="max-width: 15ch;" placeholder="type (json, string)" id="message-type">
-            <input type="text" style="max-width: 15ch;" placeholder="message event" id="message-event">
+            <input type="text" style="max-width: 15ch;" placeholder="message channel" id="message-event">
             <input type="text" style="width: 100%;" id="message-value" placeholder="message...">
             <button id="send-message-button">Send</button>
         </div>
@@ -47,5 +56,5 @@
 </body>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="utils.js"></script>
-<script src="main.js?v=3"></script>
+<script src="main.js?v=4"></script>
 </html>
