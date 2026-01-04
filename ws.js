@@ -1,6 +1,6 @@
 import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 
-class ConnectionManager {
+export default class ConnectionManager {
     isConnected() { return this.io && this.io.connected }
 
     async connect(addr, additionalSocketSettings = {}) {
@@ -18,6 +18,11 @@ class ConnectionManager {
 
             this.io.on("disconnect", () => {
                 if (this.onDisconnect) this.onDisconnect()
+                resolve()
+            })
+
+            this.io.on("error", err => {
+                if (this.onError) this.onError(err)
                 resolve()
             })
         })
@@ -58,6 +63,8 @@ class ConnectionManager {
     setMessageCallback(callback) { this.onMessage = callback }
 
     setDisconnectCallback(callback) { this.onDisconnect = callback }
+
+    setErrorCallback(callback) { this.onError = callback }
 
     emit(channel, message) {
         if (this.isConnected()) this.io.emit(channel, message)
