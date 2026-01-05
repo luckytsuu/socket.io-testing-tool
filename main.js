@@ -1,43 +1,37 @@
-import { updateChannelsDisplay, updateConnectionInfoVisibilty } from "./display.js";
+import { createMessage, updateChannelsDisplay, updateConnectionInfoVisibilty } from "./display.js";
 import { elements } from "./dom.js";
 import ConnectionManager from "./ws.js";
 
 const manager = new ConnectionManager()
 
-manager.setMessageCallback((msg, channel) => {
-    console.log(`${channel}: ${msg}`)
+manager.setMessageCallback((msg, channel) => createMessage(channel, msg))
+
+manager.setConnectionCallback((address) => {
+    createMessage("Client", `Connection successfully established with ${address}`)
+    elements["#connection-address-field"].value = null
+    elements["#connect-button"].textContent = "Disconnect"
+    elements["#channels-options"].style.display = "block"
+    updateConnectionInfoVisibilty(manager)
+    updateChannelsDisplay(manager)
 })
 
 manager.setDisconnectCallback(() => {
-    console.log("O Cliente foi desconectado!")
+    createMessage("Client", "The client has been disconnected")
     elements["#connect-button"].textContent = "Connect"
     elements["#channels-options"].style.display = "none"
     updateConnectionInfoVisibilty(manager)
+    updateChannelsDisplay(manager)
 })
 
 manager.setErrorCallback(e => {
-    console.log(`Um erro aconteceu: ${e}`)
+    createMessage("Client (ERROR)", `An error occurred: ${e}`)
     manager.disconnect()
 })
 
 elements["#connect-button"].addEventListener("click", () => {
-    if (!manager.isConnected()) {
-        const addr = elements["#connection-address-field"].value
-    
-        manager.connect(addr)
-            .catch(e => console.log(`Um erro aconteceu: ${e}`))
-            .then(() => {
-                elements["#connection-address-field"].value = null
-                elements["#connect-button"].textContent = "Disconnect"
-                elements["#channels-options"].style.display = "block"
-                updateConnectionInfoVisibilty(manager)
-                updateChannelsDisplay(manager)
-            })
-        return
-    }
-    manager.disconnect()
-    updateConnectionInfoVisibilty(manager)
-    updateChannelsDisplay(manager)
+    manager.isConnected() 
+        ? manager.disconnect() 
+        : manager.connect(elements["#connection-address-field"].value)
 })
 
 elements["#add-channel-button"].addEventListener("click", () => {

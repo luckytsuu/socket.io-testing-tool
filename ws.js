@@ -1,4 +1,5 @@
 import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+import { createMessage } from "./display.js";
 
 export default class ConnectionManager {
     isConnected() { return this.io && this.io.connected }
@@ -13,6 +14,7 @@ export default class ConnectionManager {
         return new Promise(resolve => {
             this.io.on("connect", () => {
                 this.addChannel("messages")
+                if (this.onConnect) this.onConnect(addr)
                 resolve()
             })
 
@@ -24,6 +26,29 @@ export default class ConnectionManager {
             this.io.on("error", err => {
                 if (this.onError) this.onError(err)
                 resolve()
+            })
+
+            this.io.on("connect_error", err => {
+                createMessage("Client (ERROR)", `An error occurred while the client was trying to connect: ${err.message}`)
+                resolve()
+            })
+
+            this.io.on("reconnect", (attempt) => {
+                createMessage("Client (RECONNECTED)", `The client successfully reconnected after ${attempt} attempts`)
+                resolve()
+            })
+
+            this.io.on("reconnecting", (attempt) => {
+                createMessage(`Client (RECONNECTING_${attempt})`, `Trying to establish a connection with ${this.addr}`)
+                resolve()
+            })
+
+            socket.on("reconnect_failed", () => {
+                createMessage("Client (ERROR)", "Reconnection aborted: Too many tries")
+            })
+
+            socket.on("reconnect_error", (err) => {
+                createMessage("Client (ERROR)", `An error occured while the reconnection was being executed: ${err}`)
             })
         })
     }
@@ -45,7 +70,10 @@ export default class ConnectionManager {
     }
 
     addChannel(channel) {
-        if (!this.isConnected() || this.listeningChannels.includes(channel)) return
+        if (!this.isConnected() || this.listeningChannels.includes(channel)) {
+            createMessage("Client (ERROR)", `Channel "${channel}" couldn't be added because it is already being listen`)
+            return
+        }
         this.listeningChannels.push(channel)
         if (!this.onMessage) return
 
@@ -58,7 +86,10 @@ export default class ConnectionManager {
             !this.isConnected() 
             || !this.listeningChannels.includes(channel)
             || this.listeningChannels.length === 1
-        ) return
+        ) {
+            createMessage("Client (ERROR)", "You have to be listening at least one channel")
+            return
+        }
 
         this.listeningChannels.splice(index, 1)
         this.io.off(channel)
@@ -68,30 +99,11 @@ export default class ConnectionManager {
 
     setDisconnectCallback(callback) { this.onDisconnect = callback }
 
+    setConnectionCallback(callback) { this.onConnect = callback }
+
     setErrorCallback(callback) { this.onError = callback }
 
     emit(channel, message) {
         if (this.isConnected()) this.io.emit(channel, message)
     }
 }
-
-/* expected workflow
-
-const manager = new ConnectionManager()
-
-manager.setMessageCallback((msg, channel) => {
-    console.log(`${channel}: ${msg}`)
-})
-
-manager.setDisconnectCallback(() => {
-    console.log("O Cliente foi desconectado!")
-})
-
-manager.connect("http://localhost:3030")
-    .then(() => {
-        manager.addChannel("createdRooms")
-        manager.emit("createRoom", "lucas")
-        manager.disconnect()
-    })
-
-*/
