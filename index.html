@@ -3,10 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Socket.io Testing Tool</title>
 </head>
 <body>
-    <button id="test-button">botão de teste ^^</button>
+    <header>
+        <div 
+            id="connection-info" 
+            class="horizontal-aligned half-second-transition" 
+            style="opacity: 0;"
+        >
+            <p class="text-readonly">
+                <span class="text-bold">ID: </span>
+                <span id="connection-id">undefined</span>
+            </p>
+            <p class="text-readonly">
+                <span class="text-bold">ADDRESS: </span>
+                <span id="connection-address">undefined</span>
+            </p>
+        </div>
+    </header>
+    <main>
+        <div style="padding: 20px;">
+            <h1 class="text-readonly">Connection Options</h1>
+            <div style="display: flex; gap: 4px;">
+                <input id="connection-address-field" type="text" placeholder="e.g.: http://localhost:3000/">
+                <button id="connect-button">Connect</button>
+            </div>
+            <hr>
+            <div id="channels-options" style="display: none;">
+                <h1 class="text-readonly">Channels Options</h1>
+                <div>
+                    <input id="new-channel-field" type="text" placeholder="channelName">
+                    <button id="add-channel-button">Add</button>
+                </div>
+                <ul id="listening-channels-list"></ul>
+            </div>
+        </div>
+        <ul id="messages-list" class="outline">
+            <p 
+                id="no-messages-warn" 
+                style="text-align: center; opacity: 0.5;"
+                class="text-readonly"
+            >
+                no messages found...
+            </p>
+        </ul>
+    </main>
 </body>
 <script type="module" src="./main.js"></script>
 </html>

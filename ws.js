@@ -54,7 +54,11 @@ export default class ConnectionManager {
 
     removeChannel(index) {
         const channel = this.listeningChannels[index]
-        if (!this.isConnected() || !this.listeningChannels.includes(channel)) return
+        if (
+            !this.isConnected() 
+            || !this.listeningChannels.includes(channel)
+            || this.listeningChannels.length === 1
+        ) return
 
         this.listeningChannels.splice(index, 1)
         this.io.off(channel)

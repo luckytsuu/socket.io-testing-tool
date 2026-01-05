@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+    --bg-main: #0e0e0e;
+    --bg-sc: #111111;
+    --bg-tr: #1b1b1b;
+    --hg: #1a1a1a;
+    --hg-sc: #292929;
+    --fg: #dfdfdf;
+    --fg-sc: #5a5a5a;
+    --rm-fg: rgb(255, 60, 60);
+    --rm-bg: rgba(255, 0, 0, 0.13);
+}
+
+/* GENERAL */
+html, body {
+    font-family: "Inter", system-ui, -apple-system, Roboto, sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background-color: var(--bg-main);
+    color: var(--fg);
+    overflow: hidden;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 100%;
+}
+
+header {
+    width: 100%;
+    height: fit-content;
+    background-color: var(--hg);
+    display: flex;
+    padding: 20px;
+}
+
+h1 {
+    font-size: large;
+    color: var(--fg-sc);
+}
+
+p {
+    margin: 0;
+    font-size: small;
+}
+
+input {
+    background-color: var(--bg-sc);
+    border: 1px solid var(--hg);
+    color: var(--fg-sc);
+    padding: 10px;
+    width: 40%;
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    border: 1px solid var(--hg-sc);
+    background-color: var(--bg-tr);
+    color: var(--fg);
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+    background-color: var(--bg-sc);
+    border: 1px solid var(--hg);
+    color: var(--fg-sc);
+    padding: 10px;
+    transition: all 0.1s ease;
+}
+
+button:hover {
+    background-color: var(--bg-tr);
+    border: 1px solid var(--hg-sc);
+    color: var(--fg);
+}
+
+hr {
+    margin: 20px 0 20px 0;
+    border: 0;
+    border-top: 1px solid var(--hg)
+}
+
+/* IDs */
+#listening-channels-list {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 20px 0 0 0;
+    list-style-type: none;
+    outline: 1px solid var(--hg);
+    max-width: 100%;
+}
+
+#listening-channels-list > li {
+    padding: 15px;
+    background-color: var(--bg-sc);
+    outline: 1px solid var(--hg);
+    cursor: pointer;
+    color: var(--fg-sc);
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+#listening-channels-list > li:hover {
+    background-color: var(--rm-bg);
+    color: var(--rm-fg);
+}
+
+#connection-info {
+    gap: 10px;
+}
+
+#messages-list {
+    width: 700px;
+    height: 100%;
+    padding: 20px;
+    margin: 0;
+    background-color: var(--bg-sc);
+}
+
+/* UTILS */
+.horizontal-aligned {
+    display: flex;
+    justify-content: center;
+}
+
+.vertical-aligned {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.centralized {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-readonly {
+    cursor: default;
+    user-select: none;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.half-second-transition {
+    transition: all 0.5s ease;
+}
+
+.outline {
+    outline: 1px solid var(--hg)
+}
