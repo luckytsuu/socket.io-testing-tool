@@ -34,7 +34,7 @@ header {
     height: fit-content;
     background-color: var(--hg);
     display: flex;
-    padding: 20px;
+    padding: 15px;
 }
 
 h1 {
@@ -122,7 +122,21 @@ hr {
     background-color: var(--bg-sc);
 }
 
+/* ELEMENTS CLASSES */
+#connection-info > p {
+    display: flex;
+    align-items: center;
+}
+
 /* UTILS */
+.icon{
+  width: 40px;
+  height: 40px;
+  background-color: var(--fg);
+  mask: url("./icon.svg") no-repeat center / contain;
+  -webkit-mask: url("./icon.svg") no-repeat center / contain;
+}
+
 .horizontal-aligned {
     display: flex;
     justify-content: center;
