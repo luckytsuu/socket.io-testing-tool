@@ -25,7 +25,7 @@ export function updateChannelsDisplay(manager) {
 
     manager.listeningChannels.forEach((channel, index) => {
         const li = document.createElement("li")
-        li.textContent = channel
+        li.textContent = `@${channel}`
 
         li.addEventListener("click", () => {
             manager.removeChannel(index)
@@ -58,7 +58,9 @@ export function createMessage(title, content, isFromClient) {
 }
 
 export function clearMessages() {
-    const list = elements["#messages-list"]
-    while (list.firstChild) list.removeChild(list.firstChild)
+    elements["#messages-list"]
+        .querySelectorAll("li")
+        .forEach(li => li.remove())
+    
     elements["#no-messages-warn"].warn.style.display = "block"
 }
