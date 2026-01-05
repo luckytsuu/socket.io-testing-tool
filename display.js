@@ -35,3 +35,30 @@ export function updateChannelsDisplay(manager) {
         elements["#listening-channels-list"].appendChild(li)
     });
 }
+
+export function createMessage(title, content, isFromClient) {
+    const warn = elements["#no-messages-warn"]
+    if (getComputedStyle(warn).display === "block") warn.style.display = "none"
+
+    const container = document.createElement("li")
+    container.className = "message-container text-readonly"
+    if (isFromClient) container.style.marginLeft = "auto"
+
+    const header = document.createElement("h1")
+    header.textContent = `@${title}`
+
+    const paragraph = document.createElement("p")
+    paragraph.textContent = content
+
+    Array.from([header, document.createElement("hr"), paragraph]).forEach(el => {
+        container.appendChild(el)
+    });
+
+    elements["#messages-list"].appendChild(container)
+}
+
+export function clearMessages() {
+    const list = elements["#messages-list"]
+    while (list.firstChild) list.removeChild(list.firstChild)
+    elements["#no-messages-warn"].warn.style.display = "block"
+}

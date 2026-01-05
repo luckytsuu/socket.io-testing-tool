@@ -120,9 +120,26 @@ hr {
     padding: 20px;
     margin: 0;
     background-color: var(--bg-sc);
+    list-style-type: none;
 }
 
-/* ELEMENTS CLASSES */
+#messages-list > li {
+    max-width: 50%;
+    min-width: 30%;
+    width: fit-content;
+    outline: 1px solid var(--hg);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#messages-list > li > hr {
+    margin: 5px 0 5px 0;
+}
+
+#messages-list > li > h1 {
+    margin: 0;
+}
+
 #connection-info > p {
     display: flex;
     align-items: center;
