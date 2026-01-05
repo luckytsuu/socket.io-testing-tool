@@ -42,7 +42,7 @@ export function createMessage(title, content) {
 
     const container = document.createElement("li")
     container.className = "message-container text-readonly"
-    if (title === "Client") container.style.marginLeft = "auto"
+    if (title.includes("Client")) container.style.marginLeft = "auto"
 
     const header = document.createElement("h1")
     header.textContent = `@${title}`
