@@ -27,19 +27,19 @@
     </header>
     <main>
         <div style="padding: 20px;">
-            <h1 class="text-readonly">Connection Options</h1>
+            <h1 class="text-readonly">Establish Connection</h1>
             <div style="display: flex; gap: 4px;">
                 <input id="connection-address-field" type="text" placeholder="e.g.: http://localhost:3000/">
                 <button id="connect-button">Connect</button>
             </div>
             <hr>
             <div id="channels-options" style="display: none;">
-                <h1 class="text-readonly">Channels Options</h1>
+                <h1 class="text-readonly">Listening Channels</h1>
+                <ul id="listening-channels-list"></ul>
                 <div>
                     <input id="new-channel-field" type="text" placeholder="channelName">
                     <button id="add-channel-button">Add</button>
                 </div>
-                <ul id="listening-channels-list"></ul>
             </div>
         </div>
         <ul id="messages-list" class="outline">
