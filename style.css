@@ -4,7 +4,7 @@
     --bg-main: #0e0e0e;
     --bg-sc: #111111;
     --bg-tr: #1b1b1b;
-    --hg: #1a1a1a;
+    --hg: #242424;
     --hg-sc: #292929;
     --fg: #dfdfdf;
     --fg-sc: #5a5a5a;
@@ -89,7 +89,7 @@ hr {
     display: flex;
     align-items: center;
     padding: 0;
-    margin: 20px 0 0 0;
+    margin: 20px 0 20px 0;
     list-style-type: none;
     outline: 1px solid var(--hg);
     max-width: 100%;
