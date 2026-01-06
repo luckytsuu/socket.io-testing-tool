@@ -62,5 +62,5 @@ export function clearMessages() {
         .querySelectorAll("li")
         .forEach(li => li.remove())
     
-    elements["#no-messages-warn"].warn.style.display = "block"
+    elements["#no-messages-warn"].style.display = "block"
 }
