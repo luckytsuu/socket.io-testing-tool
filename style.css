@@ -234,14 +234,12 @@ hr {
     display: flex;
     align-items: center;
     padding: 2px;
-    transition: all 0.5s ease;
 }
 
 .options-switcher > div > div {
     width: 50%;
     height: 100%;
     background-color: var(--fg-sc);
-    transition: all 0.5s ease;
 }
 
 [data-activated="true"] > div > div {
@@ -251,4 +249,8 @@ hr {
 
 [data-activated="true"] > div {
     outline: 1px solid var(--fg);
+}
+
+[data-activated="false"] {
+    color: var(--fg-sc);
 }
