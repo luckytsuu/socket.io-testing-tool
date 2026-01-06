@@ -10,5 +10,6 @@ function getUnique(tagsArray) {
 export const elements = getUnique([
     "#connection-id", "#connection-address", "#connection-info", "#no-messages-warn", 
     "#connect-button", "#connection-address-field", "#listening-channels-list",
-    "#new-channel-field", "#add-channel-button", "#channels-options", "#messages-list"
+    "#new-channel-field", "#add-channel-button", "#channels-options", "#messages-list",
+    "#message-channel-field", "#message-content-field", "#emit-message-button"
 ])

@@ -43,11 +43,11 @@ export default class ConnectionManager {
                 resolve()
             })
 
-            socket.on("reconnect_failed", () => {
+            this.io.on("reconnect_failed", () => {
                 createMessage("Client (ERROR)", "Reconnection aborted: Too many tries")
             })
 
-            socket.on("reconnect_error", (err) => {
+            this.io.on("reconnect_error", (err) => {
                 createMessage("Client (ERROR)", `An error occured while the reconnection was being executed: ${err}`)
             })
         })
@@ -56,7 +56,7 @@ export default class ConnectionManager {
     disconnect() {
         if (this.isConnected()) this.io.disconnect()
 
-        this.removeChannels(this.listeningChannels)
+        this.listeningChannels = []
         this.addr = undefined
         this.io = undefined
     }
@@ -104,6 +104,8 @@ export default class ConnectionManager {
     setErrorCallback(callback) { this.onError = callback }
 
     emit(channel, message) {
-        if (this.isConnected()) this.io.emit(channel, message)
+        this.isConnected() 
+            ? this.io.emit(channel, message)
+            : createMessage("Client (ERROR)", "Connect to a server before try to emit a message")
     }
 }

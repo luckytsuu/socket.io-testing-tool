@@ -114,13 +114,37 @@ hr {
     gap: 10px;
 }
 
+#messages-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+#mail-container {
+    height: 10%;
+    background-color: var(--bg-sc);
+    padding: 20px 20px 0 20px;
+}
+
+#mail-wrapper > input {
+    background-color: var(--bg-main);
+}
+
+#mail-wrapper > input:focus {
+    background-color: var(--bg-tr);
+}
+
+#emit-message-button {
+    border-radius: 0 20px 20px 0;
+}
+
 #messages-list {
     width: 700px;
-    height: 100%;
+    height: 800px;
     padding: 20px;
     margin: 0;
     background-color: var(--bg-sc);
     list-style-type: none;
+    overflow-y: auto;
 }
 
 #messages-list > li {

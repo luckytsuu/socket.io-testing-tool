@@ -40,3 +40,12 @@ elements["#add-channel-button"].addEventListener("click", () => {
     updateChannelsDisplay(manager)
     elements["#new-channel-field"].value = null
 })
+
+elements["#emit-message-button"].addEventListener("click", () => {
+    const content = elements["#message-content-field"].value
+    const channel = elements["#message-channel-field"].value
+    manager.emit(channel, content)
+
+    elements["#message-content-field"].value = null
+    elements["#message-channel-field"].value = null
+})

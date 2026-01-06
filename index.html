@@ -42,15 +42,34 @@
                 </div>
             </div>
         </div>
-        <ul id="messages-list" class="outline">
-            <p 
-                id="no-messages-warn" 
-                style="text-align: center; opacity: 0.5;"
-                class="text-readonly"
-            >
-                no messages found...
-            </p>
-        </ul>
+        <div id="messages-wrapper" class="outline">
+            <ul id="messages-list">
+                <p 
+                    id="no-messages-warn" 
+                    style="text-align: center; opacity: 0.5;"
+                    class="text-readonly"
+                >
+                    no messages found...
+                </p>
+            </ul>
+            <div id="mail-container">
+                <div id="mail-wrapper" class="horizontal-aligned">
+                    <input 
+                        style="width: 25%; border-radius: 20px 0 0 20px;"
+                        id="message-channel-field" 
+                        placeholder="Channel" 
+                        type="text" 
+                    >
+                    <input 
+                        id="message-content-field" 
+                        placeholder="Message" 
+                        style="width: 60%;"
+                        type="text" 
+                    >
+                    <button id="emit-message-button">Emit</button>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 <script type="module" src="./main.js"></script>
