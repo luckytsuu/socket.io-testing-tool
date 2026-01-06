@@ -1,5 +1,6 @@
 import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 import { createMessage } from "./display.js";
+import { generalConfigs } from "./main.js";
 
 export default class ConnectionManager {
     isConnected() { return this.io && this.io.connected }
@@ -105,7 +106,7 @@ export default class ConnectionManager {
 
     emit(channel, message) {
         this.isConnected() 
-            ? this.io.emit(channel, message)
+            ? this.io.emit(channel, generalConfigs["useJSON"] ? JSON.parse(message) : message)
             : createMessage("Client (ERROR)", "Connect to a server before try to emit a message")
     }
 }

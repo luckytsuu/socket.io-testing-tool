@@ -3,6 +3,7 @@ import { elements } from "./dom.js";
 import ConnectionManager from "./ws.js";
 
 const manager = new ConnectionManager()
+export const generalConfigs = {}
 
 manager.setMessageCallback((msg, channel) => createMessage(channel, msg))
 
@@ -56,6 +57,17 @@ document.querySelectorAll(".options-switcher").forEach(switcher => {
     switcher.addEventListener("click", () => {
         const isActivated = switcher.dataset.activated === "true"
         switcher.dataset.activated = String(!isActivated) // invert value
-        // FIX: update config JSON
+        generalConfigs[switcher.dataset.name] = !isActivated // update it in general configs
     })
-});
+})
+
+// initial value assignement
+document.querySelector("#general-options-list")
+    .querySelectorAll("li").forEach(option => {
+        switch (option.className) {
+            case "options-switcher":
+                const isActivated = option.dataset.activated === "true"
+                generalConfigs[option.dataset.name] = isActivated
+                break
+        }
+    })
