@@ -49,3 +49,11 @@ elements["#emit-message-button"].addEventListener("click", () => {
     elements["#message-content-field"].value = null
     elements["#message-channel-field"].value = null
 })
+
+document.querySelectorAll(".options-switcher").forEach(switcher => {
+    switcher.addEventListener("click", () => {
+        const isActivated = switcher.dataset.activated === "true"
+        switcher.dataset.activated = String(!isActivated) // invert value
+        // FIX: update config JSON
+    })
+});

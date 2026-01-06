@@ -85,6 +85,12 @@ hr {
 }
 
 /* IDs */
+#general-options-list {
+    list-style-type: none;
+    padding: 0;
+    gap: 3px;
+}
+
 #listening-channels-list {
     display: flex;
     align-items: center;
@@ -212,4 +218,37 @@ hr {
 
 .outline {
     outline: 1px solid var(--hg)
+}
+
+/* CUSTOM OPTIONS CLASSES */
+.options-switcher {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.options-switcher > div {
+    width: 30px;
+    height: 20px;
+    outline: 1px solid var(--fg-sc);
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    transition: all 0.5s ease;
+}
+
+.options-switcher > div > div {
+    width: 50%;
+    height: 100%;
+    background-color: var(--fg-sc);
+    transition: all 0.5s ease;
+}
+
+[data-activated="true"] > div > div {
+    margin-left: auto;
+    background-color: var(--fg);
+}
+
+[data-activated="true"] > div {
+    outline: 1px solid var(--fg);
 }
