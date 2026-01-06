@@ -1,4 +1,4 @@
-import { createMessage, updateChannelsDisplay, updateConnectionInfoVisibilty } from "./display.js";
+import { clearMessages, createMessage, updateChannelsDisplay, updateConnectionInfoVisibilty } from "./display.js";
 import { elements } from "./dom.js";
 import ConnectionManager from "./ws.js";
 
@@ -49,6 +49,8 @@ elements["#emit-message-button"].addEventListener("click", () => {
     elements["#message-content-field"].value = null
     elements["#message-channel-field"].value = null
 })
+
+elements["#clear-messages-button"].addEventListener("click", clearMessages)
 
 document.querySelectorAll(".options-switcher").forEach(switcher => {
     switcher.addEventListener("click", () => {
