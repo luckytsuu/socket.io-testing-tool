@@ -1,8 +1,11 @@
 import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-import { createMessage } from "./display.js";
 
 export default class ConnectionManager {
     isConnected() { return this.io && this.io.connected }
+
+    setActionCallbacks(actionCallbacks) { this.actionCallbacks = actionCallbacks }
+    // should follow the formula: {actionName: () => console.log("action")}
+    // e.g.: {connect: (addr) => console.log(`connected to: ${addr}`)}
 
     async connect(addr, additionalSocketSettings = {}) {
         if (this.isConnected()) this.disconnect()
@@ -12,44 +15,36 @@ export default class ConnectionManager {
         this.listeningChannels = []
 
         return new Promise(resolve => {
-            this.io.on("connect", () => {
-                this.addChannel("messages")
-                if (this.onConnect) this.onConnect(addr)
-                resolve()
-            })
-
-            this.io.on("disconnect", () => {
-                if (this.onDisconnect) this.onDisconnect()
-                resolve()
-            })
-
-            this.io.on("error", err => {
-                if (this.onError) this.onError(err)
-                resolve()
-            })
-
-            this.io.on("connect_error", err => {
-                createMessage("Client (ERROR)", `An error occurred while the client was trying to connect: ${err.message}`)
-                resolve()
-            })
-
-            this.io.on("reconnect", (attempt) => {
-                createMessage("Client (RECONNECTED)", `The client successfully reconnected after ${attempt} attempts`)
-                resolve()
-            })
-
-            this.io.on("reconnecting", (attempt) => {
-                createMessage(`Client (RECONNECTING_${attempt})`, `Trying to establish a connection with ${this.addr}`)
-                resolve()
-            })
-
-            this.io.on("reconnect_failed", () => {
-                createMessage("Client (ERROR)", "Reconnection aborted: Too many tries")
-            })
-
-            this.io.on("reconnect_error", (err) => {
-                createMessage("Client (ERROR)", `An error occured while the reconnection was being executed: ${err}`)
-            })
+            for (const [action, callback] of Object.entries(this.actionCallbacks)) {
+                switch (action) {
+                    // special cases
+                    case "message":
+                        this.onMessage = callback
+                        break
+                    case "connect":
+                        this.io.on("connect", () => {
+                            this.addChannel("messages")
+                            callback(addr)
+                        })
+                        break
+                    // error cases & reconnection attempt
+                    case "reconnect_error":
+                    case "connect_error":
+                    case "reconnecting":
+                    case "reconnect":
+                    case "error":
+                        this.io.on(action, arg => {
+                            callback(arg)
+                            resolve()
+                        })
+                        break
+                    default:
+                        this.io.on(action, () => {
+                            callback()
+                            resolve()
+                        })
+                }
+            }
         })
     }
 
@@ -69,9 +64,9 @@ export default class ConnectionManager {
         channelsIndex.forEach(idx => this.removeChannel(idx))
     }
 
-    addChannel(channel) {
+    addChannel(channel, onError) {
         if (!this.isConnected() || this.listeningChannels.includes(channel)) {
-            createMessage("Client (ERROR)", `Channel "${channel}" couldn't be added because it is already being listen`)
+            onError()
             return
         }
         this.listeningChannels.push(channel)
@@ -80,14 +75,14 @@ export default class ConnectionManager {
         this.io.on(channel, msg => this.onMessage(msg, channel))
     }
 
-    removeChannel(index) {
+    removeChannel(index, onError) {
         const channel = this.listeningChannels[index]
         if (
             !this.isConnected() 
             || !this.listeningChannels.includes(channel)
             || this.listeningChannels.length === 1
         ) {
-            createMessage("Client (ERROR)", "You have to be listening at least one channel")
+            onError()
             return
         }
 
@@ -95,17 +90,9 @@ export default class ConnectionManager {
         this.io.off(channel)
     }
 
-    setMessageCallback(callback) { this.onMessage = callback }
-
-    setDisconnectCallback(callback) { this.onDisconnect = callback }
-
-    setConnectionCallback(callback) { this.onConnect = callback }
-
-    setErrorCallback(callback) { this.onError = callback }
-
-    emit(channel, message) {
+    emit(channel, message, onError) {
         this.isConnected() 
             ? this.io.emit(channel, message)
-            : createMessage("Client (ERROR)", "Connect to a server before try to emit a message")
+            : onError()
     }
 }

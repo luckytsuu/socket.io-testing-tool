@@ -28,7 +28,9 @@ export function updateChannelsDisplay(manager) {
         li.textContent = `@${channel}`
 
         li.addEventListener("click", () => {
-            manager.removeChannel(index)
+            manager.removeChannel(index, () => {
+                createMessage("Client (ERROR)", "You have to be listening at least one channel")
+            })
             updateChannelsDisplay(manager)
         })
 

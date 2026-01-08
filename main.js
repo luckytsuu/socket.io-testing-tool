@@ -3,31 +3,31 @@ import { elements } from "./dom.js";
 import ConnectionManager from "./ws.js";
 
 const manager = new ConnectionManager()
+
+manager.setActionCallbacks({
+    "message": (msg, channel) => createMessage(channel, msg),
+    "connect": address => {
+        createMessage("Client", `Connection successfully established with ${address}`)
+        elements["#connection-address-field"].value = null
+        elements["#connect-button"].textContent = "Disconnect"
+        elements["#channels-options"].style.display = "block"
+        updateConnectionInfoVisibilty(manager)
+        updateChannelsDisplay(manager)
+    },
+    "disconnect": () => {
+        createMessage("Client", "The client has been disconnected")
+        elements["#connect-button"].textContent = "Connect"
+        elements["#channels-options"].style.display = "none"
+        updateConnectionInfoVisibilty(manager)
+        updateChannelsDisplay(manager)
+    },
+    "error": e => {
+        createMessage("Client (ERROR)", `An error occurred: ${e}`)
+        manager.disconnect()
+    }
+})
+
 export const generalConfigs = {}
-
-manager.setMessageCallback((msg, channel) => createMessage(channel, msg))
-
-manager.setConnectionCallback((address) => {
-    createMessage("Client", `Connection successfully established with ${address}`)
-    elements["#connection-address-field"].value = null
-    elements["#connect-button"].textContent = "Disconnect"
-    elements["#channels-options"].style.display = "block"
-    updateConnectionInfoVisibilty(manager)
-    updateChannelsDisplay(manager)
-})
-
-manager.setDisconnectCallback(() => {
-    createMessage("Client", "The client has been disconnected")
-    elements["#connect-button"].textContent = "Connect"
-    elements["#channels-options"].style.display = "none"
-    updateConnectionInfoVisibilty(manager)
-    updateChannelsDisplay(manager)
-})
-
-manager.setErrorCallback(e => {
-    createMessage("Client (ERROR)", `An error occurred: ${e}`)
-    manager.disconnect()
-})
 
 elements["#connect-button"].addEventListener("click", () => {
     manager.isConnected() 
@@ -37,7 +37,9 @@ elements["#connect-button"].addEventListener("click", () => {
 
 elements["#add-channel-button"].addEventListener("click", () => {
     const channelName = elements["#new-channel-field"].value
-    manager.addChannel(channelName)
+    manager.addChannel(channelName, () => {
+        createMessage("Client (ERROR)", `Channel "${channel}" couldn't be added because it is already being listen`)
+    })
     updateChannelsDisplay(manager)
     elements["#new-channel-field"].value = null
 })
@@ -49,11 +51,14 @@ elements["#emit-message-button"].addEventListener("click", () => {
 
     try {
         if (generalConfigs["useJSON"]) convertedContent = JSON.parse(content)
-            manager.emit(channel, convertedContent)
-            
-            elements["#message-content-field"].value = null
-            elements["#message-channel-field"].value = null
-            createMessage(channel, content, true) // always save the stringfied version
+        
+        manager.emit(channel, convertedContent, () => {
+            createMessage("Client (ERROR)", "Connect to a server before try to emit a message")
+        })
+        
+        elements["#message-content-field"].value = null
+        elements["#message-channel-field"].value = null
+        createMessage(channel, content, true) // always save the stringfied version
     } catch (_)  {
         createMessage("Client (ERROR)", `Couldn't parse "${content}" to JSON`)
     }
