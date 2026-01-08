@@ -1,6 +1,6 @@
-import { clearMessages, createMessage, updateChannelsDisplay, updateConnectionInfoVisibilty } from "./display.js";
-import { elements } from "./dom.js";
-import ConnectionManager from "./ws.js";
+import { clearMessages, createMessage, updateChannelsDisplay, updateConnectionInfoVisibilty } from "./display.js?v=2";
+import { elements } from "./dom.js?v=2";
+import ConnectionManager from "./ws.js?v=2";
 
 const manager = new ConnectionManager()
 

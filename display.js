@@ -1,4 +1,4 @@
-import { elements } from "./dom.js";
+import { elements } from "./dom.js?v=2";
 
 export function updateConnectionInfoVisibilty(manager) {
     const isConnected = manager.isConnected()
