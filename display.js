@@ -36,13 +36,13 @@ export function updateChannelsDisplay(manager) {
     });
 }
 
-export function createMessage(title, content) {
+export function createMessage(title, content, threatAsClient = false) {
     const warn = elements["#no-messages-warn"]
     if (getComputedStyle(warn).display === "block") warn.style.display = "none"
 
     const container = document.createElement("li")
     container.className = "message-container text-readonly"
-    if (title.includes("Client")) container.style.marginLeft = "auto"
+    if (title.includes("Client") || threatAsClient) container.style.marginLeft = "auto"
 
     const header = document.createElement("h1")
     header.textContent = `@${title}`

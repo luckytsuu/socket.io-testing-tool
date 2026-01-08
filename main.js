@@ -45,10 +45,18 @@ elements["#add-channel-button"].addEventListener("click", () => {
 elements["#emit-message-button"].addEventListener("click", () => {
     const content = elements["#message-content-field"].value
     const channel = elements["#message-channel-field"].value
-    manager.emit(channel, content)
+    let convertedContent = content
 
-    elements["#message-content-field"].value = null
-    elements["#message-channel-field"].value = null
+    try {
+        if (generalConfigs["useJSON"]) convertedContent = JSON.parse(content)
+            manager.emit(channel, convertedContent)
+            
+            elements["#message-content-field"].value = null
+            elements["#message-channel-field"].value = null
+            createMessage(channel, content, true) // always save the stringfied version
+    } catch (_)  {
+        createMessage("Client (ERROR)", `Couldn't parse "${content}" to JSON`)
+    }
 })
 
 elements["#clear-messages-button"].addEventListener("click", clearMessages)
@@ -69,5 +77,6 @@ document.querySelector("#general-options-list")
                 const isActivated = option.dataset.activated === "true"
                 generalConfigs[option.dataset.name] = isActivated
                 break
+            // FEAT: add reconnect amount and timeout input config
         }
     })
