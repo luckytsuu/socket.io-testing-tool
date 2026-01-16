@@ -50,7 +50,7 @@ export function createMessage(title, content, threatAsClient = false) {
     header.textContent = `@${title}`
 
     const paragraph = document.createElement("p")
-    paragraph.textContent = content
+    paragraph.textContent = typeof content === "object" ? JSON.stringify(content) : content
 
     Array.from([header, document.createElement("hr"), paragraph]).forEach(el => {
         container.appendChild(el)

@@ -1,4 +1,4 @@
-import { clearMessages, createMessage, updateChannelsDisplay, updateConnectionInfoVisibilty } from "./display.js?v=2";
+import { clearMessages, createMessage, updateChannelsDisplay, updateConnectionInfoVisibilty } from "./display.js?v=3";
 import { elements } from "./dom.js?v=2";
 import ConnectionManager from "./ws.js?v=2";
 
