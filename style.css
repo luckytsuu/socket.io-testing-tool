@@ -37,6 +37,13 @@ header {
     padding: 15px;
 }
 
+header > span {
+    margin-right: 35px;
+    margin-left: auto;
+    align-items: center;
+    display: flex;
+}
+
 h1 {
     font-size: large;
     color: var(--fg-sc);
