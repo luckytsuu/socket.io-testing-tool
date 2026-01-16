@@ -56,8 +56,10 @@ elements["#emit-message-button"].addEventListener("click", () => {
             createMessage("Client (ERROR)", "Connect to a server before try to emit a message")
         })
         
-        elements["#message-content-field"].value = null
-        elements["#message-channel-field"].value = null
+        if (generalConfigs["clearMessageSetup"]) {
+            elements["#message-content-field"].value = null
+            elements["#message-channel-field"].value = null
+        }
         createMessage(channel, content, true) // always save the stringfied version
     } catch (_)  {
         createMessage("Client (ERROR)", `Couldn't parse "${content}" to JSON`)

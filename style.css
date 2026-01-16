@@ -88,7 +88,10 @@ hr {
 #general-options-list {
     list-style-type: none;
     padding: 0;
-    gap: 3px;
+}
+
+#general-options-list li {
+    margin-bottom: 10px;
 }
 
 #listening-channels-list {
@@ -225,6 +228,7 @@ hr {
 .options-switcher {
     display: flex;
     align-items: center;
+    cursor: pointer;
     gap: 10px;
 }
 
